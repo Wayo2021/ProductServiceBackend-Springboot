@@ -1,0 +1,10 @@
+DAO(or Repository) คือ object ของคลาส ที่มีเมธอดที่เกี่ยวข้องกับการทำงานกับฐานข้อมูลโดยเฉพาะ
+
+Product getProduct (int productId)
+ArrayList<Product> getAllProduct()
+createProduct (Product product)
+updateProduct (Product product)
+deleteProduct (int productId)
+
+ProductDAO
+Product

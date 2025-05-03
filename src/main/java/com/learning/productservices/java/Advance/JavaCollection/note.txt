@@ -1,0 +1,3 @@
+ชุดข้อมูลภายใต้ class interface collection แบ่งออกเป็น 4 แบบคือ Set List Queue Deque
+ชุดข้อมูลแยกต่างหากคือ class interface Map
+
