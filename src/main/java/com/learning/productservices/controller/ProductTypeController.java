@@ -24,7 +24,7 @@ public class ProductTypeController {
     private ProductTypeService productTypeService;
 
     //-----------------------------------------------------------------------------------post
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<?> createProductType(@RequestBody ProductTypeDto productTypeDtoRequest) {
 
         Optional<TblProductTypes> productTypes = productTypeService.saveProductType(productTypeDtoRequest);
@@ -41,7 +41,7 @@ public class ProductTypeController {
         return productTypeService.getProductTypeAll();
     }
 
-    @GetMapping("/getById/id")
+    @GetMapping("/getById/{id}")
     public ResponseEntity<?> getProductTypeById(@PathVariable Long id) {
 
         Optional<TblProductTypes> productTypeById = productTypeService.getProductTypeById(id);
