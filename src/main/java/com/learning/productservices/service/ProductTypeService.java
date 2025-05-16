@@ -17,4 +17,6 @@ public interface ProductTypeService {
 
     Optional<TblProductTypes> getProductTypeById(Long id);
 
+    void deleteProductType(Long id);
+
 }

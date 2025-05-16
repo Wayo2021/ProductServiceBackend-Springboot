@@ -23,7 +23,7 @@ public class ProductTypeController {
     @Autowired
     private ProductTypeService productTypeService;
 
-    //-----------------------------------------------------------------------------------post
+    //-----------------------------------------------------------------------------------POST
     @PostMapping("/create")
     public ResponseEntity<?> createProductType(@RequestBody ProductTypeDto productTypeDtoRequest) {
 
@@ -35,12 +35,13 @@ public class ProductTypeController {
         }
     }
 
-    //-----------------------------------------------------------------------------------get all
+    //-----------------------------------------------------------------------------------GET ALL
     @GetMapping("/getAll")
     public List<TblProductTypes> readProductTypesAll() {
         return productTypeService.getProductTypeAll();
     }
 
+    //-----------------------------------------------------------------------------------GET BY ID
     @GetMapping("/getById/{id}")
     public ResponseEntity<?> getProductTypeById(@PathVariable Long id) {
 
@@ -51,5 +52,11 @@ public class ProductTypeController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @DeleteMapping("/deleteById/{id}")
+    public String deleteProductTypeById(@PathVariable Long id) {
+        productTypeService.deleteProductType(id);
+        return "Delete Successfully";
     }
 }
