@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -72,4 +73,22 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     public void deleteProductType(Long id) {
         productTypeRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<TblProductTypes> updateProductType(ProductTypeDto productTypeDto, Long id) {
+
+        TblProductTypes productTypes = productTypeRepository.findById(id).get();
+
+        if (Objects.nonNull(productTypeDto.getProductTypeCode()) && !"".equalsIgnoreCase(productTypeDto.getProductTypeCode())) {
+            productTypes.setProductTypeCode(productTypeDto.getProductTypeCode());
+        }
+
+        if (Objects.nonNull(productTypeDto.getProductTypeName()) && !"".equalsIgnoreCase(productTypeDto.getProductTypeName())) {
+            productTypes.setProductTypeName(productTypeDto.getProductTypeName());
+        }
+
+        return Optional.of(productTypeRepository.save(productTypes));
+    }
+
+
 }

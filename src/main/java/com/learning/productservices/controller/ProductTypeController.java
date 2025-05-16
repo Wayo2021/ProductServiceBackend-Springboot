@@ -54,6 +54,17 @@ public class ProductTypeController {
         }
     }
 
+    @PutMapping("/updateById/{id}")
+    public ResponseEntity<?> updateProductType(@RequestBody ProductTypeDto productTypeDto, @PathVariable Long id) throws RuntimeException {
+        Optional<TblProductTypes> productTypes = productTypeService.updateProductType(productTypeDto, id);
+
+        if (productTypes.isPresent()) {
+            return ResponseEntity.ok(productTypes);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @DeleteMapping("/deleteById/{id}")
     public String deleteProductTypeById(@PathVariable Long id) {
         productTypeService.deleteProductType(id);

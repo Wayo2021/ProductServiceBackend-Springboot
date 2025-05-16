@@ -19,4 +19,6 @@ public interface ProductTypeService {
 
     void deleteProductType(Long id);
 
+    Optional<TblProductTypes> updateProductType(ProductTypeDto productTypeDto, Long id);
+
 }
