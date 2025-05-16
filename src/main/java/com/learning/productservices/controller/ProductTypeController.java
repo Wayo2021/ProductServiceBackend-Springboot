@@ -36,13 +36,13 @@ public class ProductTypeController {
     }
 
     //-----------------------------------------------------------------------------------GET ALL
-    @GetMapping("/getAll")
+    @GetMapping("/get")
     public List<TblProductTypes> readProductTypesAll() {
         return productTypeService.getProductTypeAll();
     }
 
     //-----------------------------------------------------------------------------------GET BY ID
-    @GetMapping("/getById/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getProductTypeById(@PathVariable Long id) {
 
         Optional<TblProductTypes> productTypeById = productTypeService.getProductTypeById(id);
@@ -54,7 +54,8 @@ public class ProductTypeController {
         }
     }
 
-    @PutMapping("/updateById/{id}")
+    //-----------------------------------------------------------------------------------UPDATE BY ID
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateProductType(@RequestBody ProductTypeDto productTypeDto, @PathVariable Long id) throws RuntimeException {
         Optional<TblProductTypes> productTypes = productTypeService.updateProductType(productTypeDto, id);
 
@@ -65,7 +66,8 @@ public class ProductTypeController {
         }
     }
 
-    @DeleteMapping("/deleteById/{id}")
+    //-----------------------------------------------------------------------------------DELETE BY ID
+    @DeleteMapping("/delete/{id}")
     public String deleteProductTypeById(@PathVariable Long id) {
         productTypeService.deleteProductType(id);
         return "Delete Successfully";
