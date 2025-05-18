@@ -6,24 +6,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "todos")
-public class TblTodos {
+@Table(name = "productType", uniqueConstraints = {@UniqueConstraint(columnNames = "productTypeCode")})
+public class ProductType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
+    @NotBlank
+    private String productTypeCode;
 
-    @Column(nullable = false)
-    private String description;
+    @NotBlank
+    private String productTypeName;
 
-    private boolean completed;
 }

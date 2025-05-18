@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "product", uniqueConstraints = {@UniqueConstraint(columnNames = "productCode")})
-public class TblProducts {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +29,6 @@ public class TblProducts {
 
     @ManyToOne
     @JoinColumn(name = "productType_id")
-    private TblProductTypes tblProductTypes;
+    private ProductType productType;
 
 }

@@ -3,9 +3,9 @@ package com.learning.productservices.controller;
 
 import com.learning.productservices.exception.ResourceNotFoundException;
 import com.learning.productservices.model.dto.ProductTypeDto;
-import com.learning.productservices.model.entities.TblProductTypes;
+import com.learning.productservices.model.entities.ProductType;
 import com.learning.productservices.service.ProductTypeService;
-import com.learning.productservices.exception.errorMessage.errorDetails.ErrorMessages;
+import com.learning.productservices.exception.errorMessage.ErrorMessages;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class ProductTypeController {
     @PostMapping("/create")
     public ResponseEntity<?> createProductType(@RequestBody ProductTypeDto productTypeDtoRequest) {
 
-        Optional<TblProductTypes> productTypes = productTypeService.saveProductType(productTypeDtoRequest);
+        Optional<ProductType> productTypes = productTypeService.saveProductType(productTypeDtoRequest);
         if (productTypes.isPresent()) {
             return ResponseEntity.ok(productTypes);
         } else {
@@ -36,16 +36,16 @@ public class ProductTypeController {
     }
 
     //-----------------------------------------------------------------------------------GET ALL
-    @GetMapping("/getAll")
-    public List<TblProductTypes> readProductTypesAll() {
+    @GetMapping("/get")
+    public List<ProductType> readProductTypesAll() {
         return productTypeService.getProductTypeAll();
     }
 
     //-----------------------------------------------------------------------------------GET BY ID
-    @GetMapping("/getById/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getProductTypeById(@PathVariable Long id) {
 
-        Optional<TblProductTypes> productTypeById = productTypeService.getProductTypeById(id);
+        Optional<ProductType> productTypeById = productTypeService.getProductTypeById(id);
 
         if (productTypeById.isPresent()) {
             return ResponseEntity.ok(productTypeById);
@@ -54,7 +54,20 @@ public class ProductTypeController {
         }
     }
 
-    @DeleteMapping("/deleteById/{id}")
+    //-----------------------------------------------------------------------------------UPDATE BY ID
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProductTypeById(@RequestBody ProductTypeDto productTypeDto, @PathVariable Long id) throws RuntimeException {
+        Optional<ProductType> productTypes = productTypeService.updateProductType(productTypeDto, id);
+
+        if (productTypes.isPresent()) {
+            return ResponseEntity.ok(productTypes);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    //-----------------------------------------------------------------------------------DELETE BY ID
+    @DeleteMapping("/delete/{id}")
     public String deleteProductTypeById(@PathVariable Long id) {
         productTypeService.deleteProductType(id);
         return "Delete Successfully";

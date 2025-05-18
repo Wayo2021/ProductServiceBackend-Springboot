@@ -2,11 +2,11 @@ package com.learning.productservices.controller;
 
 import com.learning.productservices.exception.NoSuchExistsException;
 import com.learning.productservices.model.dto.ProductDto;
-import com.learning.productservices.model.entities.TblProducts;
+import com.learning.productservices.model.entities.Product;
 import com.learning.productservices.model.request.RequestParamDto;
 import com.learning.productservices.repository.ProductRepository;
 import com.learning.productservices.service.ProductService;
-import com.learning.productservices.exception.errorMessage.errorDetails.ErrorMessages;
+import com.learning.productservices.exception.errorMessage.ErrorMessages;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,29 +34,29 @@ public class  ProductController {
 
         productService.validateProduct(requestParamDto);
 
-        Optional<TblProducts> saveProduct = productService.saveProduct(requestParamDto.getProduct());
+        Optional<Product> saveProduct = productService.saveProduct(requestParamDto.getProduct());
 
         return ResponseEntity.ok(saveProduct);
     }
 
     //-----------------------------------------------------------------------------------get
-    @GetMapping("/getAll")
-    public List<TblProducts> readProductsAll() {
+    @GetMapping("/get")
+    public List<Product> readProductsAll() {
         return productService.getProductsAll();
     }
 
     //-----------------------------------------------------------------------------------get by id
-    @GetMapping("/getById/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Long id) {
 
-        Optional<TblProducts> productById = productService.getProductById(id);
+        Optional<Product> productById = productService.getProductById(id);
 
         return ResponseEntity.ok(productById);
 
     }
 
     //-----------------------------------------------------------------------------------get by query
-    @GetMapping("/getByQuery")
+    @GetMapping("/get/query")
     public Object getProductByQuery(@RequestParam Map<String, String> param) throws NoSuchExistsException {
 
         String productCode = param.get("productCode");
@@ -73,17 +73,17 @@ public class  ProductController {
     }
 
     //-----------------------------------------------------------------------------------put by id
-    @PutMapping("/updateById/{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody RequestParamDto requestParamDto, @PathVariable Long id) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProductById(@RequestBody RequestParamDto requestParamDto, @PathVariable Long id) {
 
-        Optional<TblProducts> productsUpdate = productService.updateProduct(requestParamDto, id);
+        Optional<Product> productsUpdate = productService.updateProduct(requestParamDto, id);
 
         return ResponseEntity.ok(productsUpdate);
     }
 
 
     //-----------------------------------------------------------------------------------patch by id
-    @PatchMapping("/updateField/{id}")//    not used
+    @PatchMapping("/update/{id}") //    NOT USED
     public ResponseEntity<ProductDto> updateProductField(@RequestBody Map<String, Object> fields, @PathVariable("id") Long id) throws ResourceNotFoundException {
         ProductDto productsUpdateByField = productService.updateProductField(id);
         return ResponseEntity.ok(productsUpdateByField);
@@ -91,16 +91,16 @@ public class  ProductController {
 
     //-----------------------------------------------------------------------------------patch by id
     @PatchMapping("/{id}")
-    public TblProducts updateProductByFields(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
+    public Product updateProductByFields(@PathVariable Long id, @RequestBody Map<String, Object> fields) {
         return productService.updateProductByField(id, fields);
     }
 
     //-----------------------------------------------------------------------------------delete by id
-    @DeleteMapping("/deleteById/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProductById(@PathVariable("id") Long id) throws RuntimeException {
         try {
             productService.deleteProductById(id);
-            return ResponseEntity.ok(HttpStatus.OK+" The DELETE request was successful");
+            return ResponseEntity.ok(HttpStatus.OK + " The DELETE request was successful");
         } catch (NoSuchExistsException e) {
             throw new NoSuchExistsException(ErrorMessages.ERROR_NOT_FOUND + id);
         }

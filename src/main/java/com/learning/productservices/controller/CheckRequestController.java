@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/check")
 @AllArgsConstructor
-public class CheckController {
+public class CheckRequestController {
 
     @Autowired
     private CheckService checkService;

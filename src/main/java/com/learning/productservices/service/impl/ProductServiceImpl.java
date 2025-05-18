@@ -1,12 +1,12 @@
 package com.learning.productservices.service.impl;
 
+import com.learning.productservices.exception.errorMessage.ErrorMessages;
 import com.learning.productservices.exception.AlreadyExistsException;
 import com.learning.productservices.exception.MustNotBeNullException;
 import com.learning.productservices.exception.NoSuchExistsException;
-import com.learning.productservices.exception.errorMessage.errorDetails.ErrorMessages;
 import com.learning.productservices.model.dto.ProductDto;
-import com.learning.productservices.model.entities.TblProductTypes;
-import com.learning.productservices.model.entities.TblProducts;
+import com.learning.productservices.model.entities.ProductType;
+import com.learning.productservices.model.entities.Product;
 import com.learning.productservices.model.request.RequestParamDto;
 import com.learning.productservices.repository.ProductRepository;
 import com.learning.productservices.repository.ProductTypeRepository;
@@ -30,9 +30,9 @@ public class ProductServiceImpl implements ProductService {
     private ProductTypeRepository productTypeRepository;
 
 
-    private TblProducts convertProductToObject(ProductDto productDtoParam) {
+    private Product convertProductJsonToObject(ProductDto productDtoParam) {
 
-        TblProducts productConvert = new TblProducts();
+        Product productConvert = new Product();
         productConvert.setId(productDtoParam.getId());
         productConvert.setProductName(productDtoParam.getProductName());
         productConvert.setProductPrice(productDtoParam.getProductPrice());
@@ -42,24 +42,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<TblProducts> saveProduct(ProductDto productDtoParam) throws AlreadyExistsException {
+    public Optional<Product> saveProduct(ProductDto productDtoParam) throws AlreadyExistsException {
 
         try {
 
             this.checkProductCodeIsAlready(productDtoParam.getProductCode()); // 1 == 1
-            List<TblProducts> productByCode = productRepository.queryByProductCode(productDtoParam.getProductCode());
+            List<Product> productByCode = productRepository.queryByProductCode(productDtoParam.getProductCode());
 
             if (productByCode.size() == 0) {
 
-                TblProducts productConverted = convertProductToObject(productDtoParam); // json -> object
+                Product productConverted = convertProductJsonToObject(productDtoParam); // json -> object
 
                 this.checkProductTypeCodeIsNull(productDtoParam.getProductTypeCode()); // 1 == null
-                Optional<TblProductTypes> productTypeByCode = productTypeRepository.queryByProductTypeCode(productDtoParam.getProductTypeCode());
+                Optional<ProductType> productTypeByCode = productTypeRepository.queryByProductTypeCode(productDtoParam.getProductTypeCode());
 
                 if (productTypeByCode.isPresent()) {
 
-                    productConverted.setTblProductTypes(productTypeByCode.get());
-                    TblProducts productSaved = productRepository.save(productConverted);
+                    productConverted.setProductType(productTypeByCode.get());
+                    Product productSaved = productRepository.save(productConverted);
                     return Optional.of(productSaved);
 
                 }
@@ -80,12 +80,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<TblProducts> getProductsAll() {
+    public List<Product> getProductsAll() {
 
         try {
-            List<TblProducts> tblProductsAll = productRepository.findAll();
+            List<Product> productAll = productRepository.findAll();
 
-            return tblProductsAll;
+            return productAll;
 
         } catch (Exception e) {
             throw new NoSuchExistsException(String.format(ErrorMessages.ERROR_NOT_FOUND, "Products"));
@@ -94,9 +94,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<TblProducts> getProductById(Long id) {
+    public Optional<Product> getProductById(Long id) {
 
-        Optional<TblProducts> productById = productRepository.findById(id);
+        Optional<Product> productById = productRepository.findById(id);
 
         if (productById.isPresent()) {
             return productById;
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
         String productCode = param.get("productCode");
         String productName = param.get("productName");
 
-        List<TblProducts> productsList = new ArrayList<>();
+        List<Product> productsList = new ArrayList<>();
 
         productsList = productRepository.queryProductCodeAndProductName(productCode, productName);
 
@@ -122,15 +122,15 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductDto> productDtoList = new ArrayList<>();
 
-        for (TblProducts products : productsList) {
+        for (Product products : productsList) {
 
             ProductDto productDto = ProductDto.builder()
                     .id(products.getId())
                     .productName(products.getProductName())
                     .productPrice(products.getProductPrice())
                     .productCode(products.getProductCode())
-                    .productTypeCode(products.getTblProductTypes().getProductTypeCode())
-                    .productType_id(products.getTblProductTypes().getId())
+                    .productTypeCode(products.getProductType().getProductTypeCode())
+                    .productType_id(products.getProductType().getId())
                     .build();
 
             productDtoList.add(productDto);
@@ -139,12 +139,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<TblProducts> updateProduct(RequestParamDto requestParamDto, Long id) throws RuntimeException {
+    public Optional<Product> updateProduct(RequestParamDto requestParamDto, Long id) throws RuntimeException {
 
-        TblProducts tblProductsUpdate = productRepository.findById(id).get();
-        Optional<TblProducts> productByCode = productRepository.findByProductCode(requestParamDto.getProduct().getProductCode());
+        Product productUpdate = productRepository.findById(id).get();
+        Optional<Product> productByCode = productRepository.findByProductCode(requestParamDto.getProduct().getProductCode());
 
-        if (tblProductsUpdate == null) {
+        if (productUpdate == null) {
             throw new NoSuchExistsException(String.format(ErrorMessages.ERROR_FIELD_BY_EQUAL, "product id" ,id));
         }
         if (!productByCode.isPresent()) {
@@ -152,41 +152,41 @@ public class ProductServiceImpl implements ProductService {
         }
 
         if (Objects.nonNull(requestParamDto.getProduct().getProductName()) && !"".equalsIgnoreCase(requestParamDto.getProduct().getProductName())) {
-            tblProductsUpdate.setProductName(requestParamDto.getProduct().getProductName());
+            productUpdate.setProductName(requestParamDto.getProduct().getProductName());
         }
 
         if (Objects.nonNull(requestParamDto.getProduct().getProductPrice()) && requestParamDto.getProduct().getProductPrice().compareTo(BigDecimal.ZERO) != 0) {
-            tblProductsUpdate.setProductPrice(requestParamDto.getProduct().getProductPrice());
+            productUpdate.setProductPrice(requestParamDto.getProduct().getProductPrice());
         }
 
         if (Objects.nonNull(requestParamDto.getProduct().getProductCode()) && !"".equalsIgnoreCase(requestParamDto.getProduct().getProductCode())) {
-            tblProductsUpdate.setProductCode(requestParamDto.getProduct().getProductCode());
+            productUpdate.setProductCode(requestParamDto.getProduct().getProductCode());
         }
 
         if (Objects.nonNull(requestParamDto.getProduct().getProductTypeCode()) && !"".equalsIgnoreCase(requestParamDto.getProduct().getProductTypeCode())) {
-            TblProductTypes tblProductTypesByCode = productTypeRepository.findByProductTypeCode(requestParamDto.getProduct().getProductTypeCode()).orElseGet(() -> {
+            ProductType productTypeByCode = productTypeRepository.findByProductTypeCode(requestParamDto.getProduct().getProductTypeCode()).orElseGet(() -> {
 
                 throw new NoSuchExistsException(ErrorMessages.ERROR_FIELD_BY_EQUAL + "product type code" + requestParamDto.getProduct().getProductTypeCode());
 
             });
 
-            tblProductsUpdate.setTblProductTypes(tblProductTypesByCode);
+            productUpdate.setProductType(productTypeByCode);
         }
 
-        TblProducts productSave = productRepository.save(tblProductsUpdate);
+        Product productSave = productRepository.save(productUpdate);
         return Optional.of(productSave);
     }
 
     @Override
     public ProductDto updateProductField(Long id) {
 
-        TblProducts productField = productRepository.findById(id).orElseThrow(() -> new NoSuchExistsException(ErrorMessages.ERROR_ALREADY_EXISTS + id));
-        TblProducts tblProducts = productRepository.save(productField);
+        Product productField = productRepository.findById(id).orElseThrow(() -> new NoSuchExistsException(ErrorMessages.ERROR_ALREADY_EXISTS + id));
+        Product product = productRepository.save(productField);
 
-        return mapToProductDto(tblProducts);
+        return mapToProductDto(product);
     }
 
-    private ProductDto mapToProductDto(TblProducts tblProducts) {
+    private ProductDto mapToProductDto(Product product) {
         ProductDto productDto = new ProductDto();
 
         productDto.setId(productDto.getId());
@@ -210,12 +210,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public TblProducts updateProductByField(Long id, Map<String, Object> fields) {//11, productCode = PD01
-        Optional<TblProducts> existingProduct = productRepository.findById(id);
+    public Product updateProductByField(Long id, Map<String, Object> fields) {//11, productCode = PD01
+        Optional<Product> existingProduct = productRepository.findById(id);
 
         if (existingProduct.isPresent()) {
             fields.forEach((key, value) -> {//productCode, PD01
-                Field field = ReflectionUtils.findField(TblProducts.class, key);//PD01
+                Field field = ReflectionUtils.findField(Product.class, key);//PD01
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, existingProduct.get(), value);//productCode, PD02(old), PD01
             });

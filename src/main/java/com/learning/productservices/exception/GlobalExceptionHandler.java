@@ -1,6 +1,6 @@
 package com.learning.productservices.exception;
 
-import com.learning.productservices.exception.errorMessage.errorDetails.ErrorResponse;
+import com.learning.productservices.exception.errorMessage.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

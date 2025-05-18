@@ -1,16 +1,19 @@
 package com.learning.productservices.model.dto;
 
+
 import lombok.*;
 
-@Setter
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductTypeDto {
+public class UserDto {
 
     private Long id;
-    private String productTypeCode;
-    private String productTypeName;
+    private String username;
+    private String email;
+    private String password;
+    private String roles;
 
 }

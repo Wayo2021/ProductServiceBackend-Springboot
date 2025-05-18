@@ -1,4 +1,4 @@
-package com.learning.productservices.exception.errorMessage.errorDetails;
+package com.learning.productservices.exception.errorMessage;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

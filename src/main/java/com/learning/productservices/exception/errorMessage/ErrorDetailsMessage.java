@@ -1,4 +1,4 @@
-package com.learning.productservices.exception.errorMessage.errorDetails;
+package com.learning.productservices.exception.errorMessage;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

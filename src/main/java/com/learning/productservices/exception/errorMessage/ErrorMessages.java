@@ -1,4 +1,4 @@
-package com.learning.productservices.exception.errorMessage.errorDetails;
+package com.learning.productservices.exception.errorMessage;
 
 public class ErrorMessages {
     public static final String ERROR_NOT_FOUND = "%s Not found! ";
