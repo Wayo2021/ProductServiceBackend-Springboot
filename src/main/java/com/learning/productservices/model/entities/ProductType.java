@@ -10,8 +10,6 @@ import javax.validation.constraints.NotBlank;
 
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "productType", uniqueConstraints = {@UniqueConstraint(columnNames = "productTypeCode")})
 public class ProductType {
