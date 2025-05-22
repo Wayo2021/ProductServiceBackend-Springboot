@@ -22,7 +22,7 @@ public interface ProductService {
 
     Optional<Product> updateProduct(RequestParamDto requestParamDto, Long id) throws RuntimeException;
 
-    ProductDto updateProductField(Long id);
+//    ProductDto updateProductField(Long id);
 
     void deleteProductById(Long id);
 

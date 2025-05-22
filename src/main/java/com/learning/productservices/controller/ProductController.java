@@ -11,6 +11,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class  ProductController {
 
     //-----------------------------------------------------------------------------------post
     @PostMapping("/create")
-    public ResponseEntity<?> createProduct(@RequestBody RequestParamDto requestParamDto)
+    public Object createProduct(@Validated @RequestBody RequestParamDto requestParamDto)
     {
 
         productService.validateProduct(requestParamDto);
@@ -83,11 +84,11 @@ public class  ProductController {
 
 
     //-----------------------------------------------------------------------------------patch by id
-    @PatchMapping("/update/{id}") //    NOT USED
-    public ResponseEntity<ProductDto> updateProductField(@RequestBody Map<String, Object> fields, @PathVariable("id") Long id) throws ResourceNotFoundException {
-        ProductDto productsUpdateByField = productService.updateProductField(id);
-        return ResponseEntity.ok(productsUpdateByField);
-    }
+//    @PatchMapping("/update/{id}") //    NOT USED
+//    public ResponseEntity<ProductDto> updateProductField(@RequestBody Map<String, Object> fields, @PathVariable("id") Long id) throws ResourceNotFoundException {
+//        ProductDto productsUpdateByField = productService.updateProductField(id);
+//        return ResponseEntity.ok(productsUpdateByField);
+//    }
 
     //-----------------------------------------------------------------------------------patch by id
     @PatchMapping("/{id}")
