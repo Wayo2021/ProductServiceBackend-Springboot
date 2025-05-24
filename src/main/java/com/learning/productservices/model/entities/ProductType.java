@@ -24,4 +24,6 @@ public class ProductType {
     @NotBlank
     private String productTypeName;
 
+    private String image;
+
 }
