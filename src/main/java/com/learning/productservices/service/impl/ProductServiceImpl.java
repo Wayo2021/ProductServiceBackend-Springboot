@@ -177,26 +177,26 @@ public class ProductServiceImpl implements ProductService {
         return Optional.of(productSave);
     }
 
-    @Override
-    public ProductDto updateProductField(Long id) {
-
-        Product productField = productRepository.findById(id).orElseThrow(() -> new NoSuchExistsException(ErrorMessages.ERROR_ALREADY_EXISTS + id));
-        Product product = productRepository.save(productField);
-
-        return mapToProductDto(product);
-    }
-
-    private ProductDto mapToProductDto(Product product) {
-        ProductDto productDto = new ProductDto();
-
-        productDto.setId(productDto.getId());
-        productDto.setProductName(productDto.getProductName());
-        productDto.setProductCode(productDto.getProductCode());
-        productDto.setProductPrice(productDto.getProductPrice());
-        productDto.setProductTypeCode(productDto.getProductTypeCode());
-
-        return productDto;
-    }
+//    @Override
+//    public ProductDto updateProductField(Long id) {
+//
+//        Product productField = productRepository.findById(id).orElseThrow(() -> new NoSuchExistsException(ErrorMessages.ERROR_ALREADY_EXISTS + id));
+//        Product product = productRepository.save(productField);
+//
+//        return mapToProductDto(product);
+//    }
+//
+//    private Product mapToProductDto(Product product) {
+//        ProductDto productDto = new ProductDto();
+//
+//        productDto.setId(productDto.getId());
+//        productDto.setProductName(product.getProductName());
+//        productDto.setProductCode(product.getProductCode());
+//        productDto.setProductPrice(product.getProductPrice());
+////        productDto.setProductTypeCode(product.getProductTypeCode());
+//
+//        return productDto;
+//    }
 
     @Override
     public void deleteProductById(Long id) {

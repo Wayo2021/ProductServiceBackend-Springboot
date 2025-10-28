@@ -1,13 +1,13 @@
 package com.learning.productservices.model.dto;
 
+import com.learning.productservices.model.request.RequestParamDto;
 import lombok.*;
 
 @Setter
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class ProductTypeDto {
+public class ProductTypeDto extends RequestParamDto {
 
     private Long id;
     private String productTypeCode;

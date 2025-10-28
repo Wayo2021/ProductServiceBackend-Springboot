@@ -1,5 +1,6 @@
 package com.learning.productservices.model.dto;
 
+import com.learning.productservices.model.request.RequestParamDto;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -8,8 +9,8 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class ProductDto {
+
+public class ProductDto extends RequestParamDto {
 
     private Long id;
     private String productName;
