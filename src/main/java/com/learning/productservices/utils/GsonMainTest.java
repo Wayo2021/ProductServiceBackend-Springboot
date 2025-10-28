@@ -1,4 +1,4 @@
-package utils;
+package com.learning.productservices.utils;
 
 import com.google.gson.reflect.TypeToken; // For generic type handling
 
