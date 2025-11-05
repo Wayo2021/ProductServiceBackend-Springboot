@@ -18,7 +18,8 @@ public class ProductservicesApplication {
 		System.out.println("======================= APP ==========================");
 		System.out.println("\tApp name\t: " + environment.getProperty(Log.APP_NAME.getValue()) );
 		System.out.println("\tApp purpose\t: " + environment.getProperty(Log.APP_PURPOSE.getValue()) );
-		System.out.println("\tApp db port\t: " + environment.getProperty(Log.APP_DB_PORT.getValue()) );
+		System.out.println("\tApp frontend port\t: " + environment.getProperty(Log.APP_FE_PORT.getValue()) );
+		System.out.println("\tApp backend port\t: " + environment.getProperty(Log.APP_BE_PORT.getValue()) );
 		System.out.println("\tApp db name\t: " + environment.getProperty(Log.APP_DB_NAME.getValue()) );
 		System.out.println("======================================================");
 	}

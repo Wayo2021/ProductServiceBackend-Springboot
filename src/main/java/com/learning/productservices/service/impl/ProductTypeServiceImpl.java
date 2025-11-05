@@ -9,6 +9,7 @@ import com.learning.productservices.repository.ProductTypeRepository;
 import com.learning.productservices.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +26,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     private ProductType productTypeConvertToObject(ProductTypeDto productTypeDtoParam) {
         ProductType productTypeConvert = new ProductType();
 
-        productTypeConvert.setId(productTypeDtoParam.getId());
+        if (!ObjectUtils.isEmpty(productTypeDtoParam.getId())) {
+            productTypeConvert.setId(productTypeDtoParam.getId());
+        }
         productTypeConvert.setProductTypeName(productTypeDtoParam.getProductTypeName());
         productTypeConvert.setProductTypeCode(productTypeDtoParam.getProductTypeCode());
 
@@ -37,13 +40,19 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 
         try {
 
-            Optional<ProductType> productTypesId = productTypeRepository.findById(productTypeDtoParam.getId());
-            if (!productTypesId.isPresent()) {
+            if (!ObjectUtils.isEmpty(productTypeDtoParam.getId())) {
+                Optional<ProductType> productTypesId = productTypeRepository.findById(productTypeDtoParam.getId());
+                if (!productTypesId.isPresent()) {
+                    ProductType productTypeConverted = productTypeConvertToObject(productTypeDtoParam);
+                    ProductType productTypeSaved = productTypeRepository.save(productTypeConverted);
+                    return Optional.of(productTypeSaved);
+                } else {
+                    throw new AlreadyExistsException(ErrorMessages.ERROR_ALREADY_EXISTS + productTypesId);
+                }
+            } else {
                 ProductType productTypeConverted = productTypeConvertToObject(productTypeDtoParam);
                 ProductType productTypeSaved = productTypeRepository.save(productTypeConverted);
                 return Optional.of(productTypeSaved);
-            } else {
-                throw new AlreadyExistsException(ErrorMessages.ERROR_ALREADY_EXISTS + productTypesId);
             }
 
         } catch (Exception ex) {

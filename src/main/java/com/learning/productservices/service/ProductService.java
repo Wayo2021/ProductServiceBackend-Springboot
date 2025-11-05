@@ -20,6 +20,8 @@ public interface ProductService {
 
     List<ProductDto> getProductByQuery(Map<String, String> param) throws NoSuchExistsException;
 
+    List<ProductDto> getProductTypeByProductCode(Map<String, String> param) throws NoSuchExistsException;
+
     Optional<Product> updateProduct(RequestParamDto requestParamDto, Long id) throws RuntimeException;
 
 //    ProductDto updateProductField(Long id);

@@ -72,6 +72,21 @@ public class  ProductController {
         return ResponseEntity.ok(productByQuery.get(0));
 
     }
+    //-----------------------------------------------------------------------------------get by query
+    @GetMapping("/get/queryProductTypeByProductCode")
+    public Object getProductTypeByProductCode(@RequestParam Map<String, String> param) throws NoSuchExistsException {
+
+        String productCode = param.get("productCode");
+
+        if(productCode == null) {
+            throw new NoSuchExistsException(ErrorMessages.ERROR_REQUIRE_PARAMETER + "productCode");
+        }
+
+        List<ProductDto> productByQuery = this.productService.getProductTypeByProductCode(param);
+
+        return ResponseEntity.ok(productByQuery.get(0));
+
+    }
 
     //-----------------------------------------------------------------------------------put by id
     @PutMapping("/update/{id}")

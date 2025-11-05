@@ -7,8 +7,9 @@ public enum Log {
 
     APP_NAME("app.name"),
     APP_PURPOSE("app.purpose"),
-    APP_DB_PORT("app.db.port"),
-    APP_DB_NAME("app.db.name");
+    APP_FE_PORT("app.frontend.port"),
+    APP_BE_PORT("app.backend.port"),
+    APP_DB_NAME("app.database.name");
 
     private final String value;
 

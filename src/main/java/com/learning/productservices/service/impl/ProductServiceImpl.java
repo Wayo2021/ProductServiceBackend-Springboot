@@ -33,7 +33,9 @@ public class ProductServiceImpl implements ProductService {
     private Product convertProductJsonToObject(ProductDto productDtoParam) {
 
         Product productConvert = new Product();
-        productConvert.setId(productDtoParam.getId());
+        if (!ObjectUtils.isEmpty(productDtoParam.getId())) {
+            productConvert.setId(productDtoParam.getId());
+        }
         productConvert.setProductName(productDtoParam.getProductName());
         productConvert.setProductPrice(productDtoParam.getProductPrice());
         productConvert.setProductCode(productDtoParam.getProductCode());
@@ -139,6 +141,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> getProductTypeByProductCode(Map<String, String> param) throws NoSuchExistsException {
+        String productCode = param.get("productCode");
+
+        List<Product> productsList = new ArrayList<>();
+
+        productsList = productRepository.queryProductCode(productCode);
+
+        if (productsList.size() == 0) {
+            throw new NoSuchExistsException(ErrorMessages.ERROR_NOT_FOUND.replace("%s", "") + "Query by " + productCode);
+        }
+
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        for (Product products : productsList) {
+
+            ProductDto productDto = ProductDto.builder()
+                    .id(products.getId())
+                    .productName(products.getProductName())
+                    .productPrice(products.getProductPrice())
+                    .productCode(products.getProductCode())
+                    .productTypeCode(products.getProductType().getProductTypeCode())
+                    .productType_id(products.getProductType().getId())
+                    .build();
+
+            productDtoList.add(productDto);
+        }
+        return productDtoList;
+    }
+
+    @Override
     public Optional<Product> updateProduct(RequestParamDto requestParamDto, Long id) throws RuntimeException {
 
         Product productUpdate = productRepository.findById(id).get();
@@ -163,15 +195,7 @@ public class ProductServiceImpl implements ProductService {
             productUpdate.setProductCode(requestParamDto.getProduct().getProductCode());
         }
 
-        if (Objects.nonNull(requestParamDto.getProduct().getProductTypeCode()) && !"".equalsIgnoreCase(requestParamDto.getProduct().getProductTypeCode())) {
-            ProductType productTypeByCode = productTypeRepository.findByProductTypeCode(requestParamDto.getProduct().getProductTypeCode()).orElseGet(() -> {
 
-                throw new NoSuchExistsException(ErrorMessages.ERROR_FIELD_BY_EQUAL + "product type code" + requestParamDto.getProduct().getProductTypeCode());
-
-            });
-
-            productUpdate.setProductType(productTypeByCode);
-        }
 
         Product productSave = productRepository.save(productUpdate);
         return Optional.of(productSave);
